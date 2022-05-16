@@ -108,20 +108,20 @@
   </head>
   <body>
     <div class="format-box">
-      <form action="/">
+      <form action="{{ url_for('formatted') }}" method="post">
         <h1>Text to Anki Formatter</h1>
         <p class="question">Place the text you'd like to convert here</p>
-        <textarea rows="15"></textarea>
+        <textarea rows="15" name="text"></textarea>
         <p class="question">Where did this text come from?</p>
         <div class="question-answer">
-          <label><input type="radio" value="imiwa" name="text-type" /> Imiwa</label>
-          <label><input type="radio" value="pleco" name="text-type" /> Pleco</label>
-          <label><input type="radio" value="misc-chinese" name="text-type" /> Misc. Chinese</label>
+          <label><input type="radio" value="imiwa" name="origin" /> Imiwa</label>
+          <label><input type="radio" value="pleco" name="origin" /> Pleco</label>
+          <label><input type="radio" value="misc-chinese" name="origin" /> Misc. Chinese</label>
         </div>
         <p class="question">What would you like to name the converted text? (Default is the current date/time.)</p>
-        <input type="text" placeholder="NewWords">
+        <input type="text" placeholder="NewWords" name="filename">
         <div class="btn-block">
-          <button type="submit" href="/">Convert!</button>
+          <button type="submit">Convert!</button>
         </div>
       </form>
     </div>
