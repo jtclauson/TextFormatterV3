@@ -1,17 +1,10 @@
-import logging
 import re
 from dragonmapper import transcriptions
 from dragonmapper import hanzi
 
-class Formatted:
-    def __init__(self, filename, text):
-        self.filename = filename
-        self.text = text
-
-def Format(input):
-    lines = input.text.split("\n")
-    filename = "formatted/"+input.filename+".txt"
-    origin = input.origin
+def Format(text, filename, origin):
+    lines = text.split("\n")
+    filename = "formatted/"+filename+".txt"
 
     formattedLines = []
     
@@ -22,14 +15,11 @@ def Format(input):
     elif origin == "misc-chinese":
         formattedLines = forMiscChinese(lines, filename)
     
-    f = Formatted(filename, formattedLines)
-    # logging.debug('f -- '+f)
-    # logging.debug('filename -- '+filename)
-    # logging.debug('formattedLines -- '+formattedLines)
-    print('f -- '+f)
-    print('filename -- '+filename)
-    print('formattedLines -- '+formattedLines)
-    return f
+    finalFormatted = {
+        "filename": filename,
+        "text": formattedLines
+    }
+    return finalFormatted
 
 
 def formatEnglish(rawString):
@@ -71,7 +61,8 @@ def forImiwa(lines):
     return formattedText
    
 def forPleco(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+    # newFile = open(filename, "w", encoding="utf8")
+    formattedText = []
 
     for i in range (len(lines)):
         if i%2==0:
@@ -81,25 +72,28 @@ def forPleco(lines, filename):
             dufa = transcriptions.to_zhuyin(pinyin)
             rawString = entry[2]#[:-1]
             meaning=formatEnglish(rawString)
-            newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
+            # newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
+            formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
                
-    newFile.close()
+    # newFile.close()
+    return formattedText
 
-def forTextScanner(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+# def forTextScanner(lines, filename):
+#     newFile = open(filename, "w", encoding="utf8")
 
-    for i in range (len(lines)):
-        if i%2==0:
-            entry = lines[i].split("\t")
-            kanji = entry[0]
-            dufa = hanzi.to_zhuyin(kanji)
-            meaning=entry[1]
-            newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
+#     for i in range (len(lines)):
+#         if i%2==0:
+#             entry = lines[i].split("\t")
+#             kanji = entry[0]
+#             dufa = hanzi.to_zhuyin(kanji)
+#             meaning=entry[1]
+#             newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
                
-    newFile.close()
+#     newFile.close()
     
 def forMiscChinese(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+    # newFile = open(filename, "w", encoding="utf8")
+    formattedText = []
 
     for i in range (len(lines)):
         if i%2==0:
@@ -109,6 +103,8 @@ def forMiscChinese(lines, filename):
             kanji = line
             imi = nextLine
             yomi = hanzi.to_zhuyin(kanji)
-            newFile.write("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
+            # newFile.write("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
+            formattedText.append("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
                
-    newFile.close()
+    # newFile.close()
+    return formattedText

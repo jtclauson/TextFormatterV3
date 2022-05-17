@@ -2,12 +2,8 @@
 {% block content %}
 
   <div class="content-container">
-    <h2>{{ testvar}}</h2>
+    <h2>{{ formatted.filename}}</h2>
+    <h2>{{ formatted.text}}</h2>
   </div>
-  {% if testvar is defined %}
-        <h2>value of testvar: {{ testvar }}</h2>
-    {% else %}
-        <h2>variable is not defined</h2>
-    {% endif %}
 
 {% endblock %}
