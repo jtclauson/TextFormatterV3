@@ -16,4 +16,4 @@ def index():
 @app.route("/formatted", methods=['GET', 'POST'])
 def formatted():
     formatted = session['formatted']
-    return render_template('formatted.html', formatted=formatted)
+    return render_template('try.html', formatted=formatted)
