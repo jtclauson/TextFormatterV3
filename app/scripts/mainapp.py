@@ -1,0 +1,1 @@
+from app.scripts import app

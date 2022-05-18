@@ -1,0 +1,22 @@
+<!doctype html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Error</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/main.css') }}">
+  </head>
+  <body>
+    <div class="format-box">
+        <div class="inner-box">
+            <h1>Sorry, there was an Error: </h1>
+            <div class="text">
+                {{error}}
+            </div>
+            <br>
+            <a href="/">Back to Text Input</a>
+        </div>
+    </div>
+  </body>
+</html>

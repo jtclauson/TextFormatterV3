@@ -1,23 +1,36 @@
 import re
 from dragonmapper import transcriptions
 from dragonmapper import hanzi
+import datetime
 
 def Format(text, filename, origin):
-    lines = text.split("\n")
-    filename = "formatted/"+filename+".txt"
+    try:
+        lines = text.split("\n")
+        inputFileName = ""
+        if not filename:
+            inputFileName = datetime.datetime.now().strftime("%Y-%m-%d")+"_"+origin
+        else:
+            inputFileName = filename
+        filename = "app/formatted/"+inputFileName+".txt"
 
-    formattedLines = []
-    
-    if origin == "imiwa":
-        formattedLines = forImiwa(lines)
-    elif origin == "pleco":
-        formattedLines = forPleco(lines, filename)
-    elif origin == "misc-chinese":
-        formattedLines = forMiscChinese(lines, filename)
+        formattedLines = []
+        
+        if origin == "Imiwa":
+            formattedLines = forImiwa(lines, filename)
+        elif origin == "Pleco":
+            formattedLines = forPleco(lines, filename)
+        elif origin == "Misc-Chinese":
+            formattedLines = forMiscChinese(lines, filename)
+    except:
+        finalFormatted = {"error": "Error in converting input text"}
+        return finalFormatted
     
     finalFormatted = {
+        "error": "",
         "filename": filename,
+        "origin": origin,
         "text": formattedLines
+
     }
     return finalFormatted
 
@@ -33,10 +46,9 @@ def formatEnglish(rawString):
                 newEntry=newEntry+"・"+chunk+"<br>"
     return newEntry
    
-def forImiwa(lines):
-    # newFile = open(filename, "w", encoding="utf8")
+def forImiwa(lines, filename):
+    newFile = open(filename, "w", encoding="utf8")
     formattedText = []
-
     for i in range (len(lines)):
         entry = lines[i]
         kanji = ""
@@ -46,22 +58,22 @@ def forImiwa(lines):
             if "[" not in entry:
                 kanji = entry[:-1]
                 yomi = "No Kanji"
-                meaning = lines[i+1]#[:-1]
-                # newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
+                meaning = lines[i+1]
+                newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
                 formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
             else:
                 spl = entry.split("[")
                 kanji = spl[0][:-1]
-                yomi = spl[1][:-1]
-                meaning = lines[i+1]#[:-1]
-                # newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
+                yomi = spl[1][:-2]
+                meaning = lines[i+1].strip()
+                newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
                 formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
                
-    # newFile.close()    
+    newFile.close()    
     return formattedText
    
 def forPleco(lines, filename):
-    # newFile = open(filename, "w", encoding="utf8")
+    newFile = open(filename, "w", encoding="utf8")
     formattedText = []
 
     for i in range (len(lines)):
@@ -70,29 +82,16 @@ def forPleco(lines, filename):
             kanji = entry[0]
             pinyin = entry[1]
             dufa = transcriptions.to_zhuyin(pinyin)
-            rawString = entry[2]#[:-1]
-            meaning=formatEnglish(rawString)
-            # newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
+            rawString = entry[2]
+            meaning=formatEnglish(rawString).strip()
+            newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
             formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
                
-    # newFile.close()
+    newFile.close()
     return formattedText
 
-# def forTextScanner(lines, filename):
-#     newFile = open(filename, "w", encoding="utf8")
-
-#     for i in range (len(lines)):
-#         if i%2==0:
-#             entry = lines[i].split("\t")
-#             kanji = entry[0]
-#             dufa = hanzi.to_zhuyin(kanji)
-#             meaning=entry[1]
-#             newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
-               
-#     newFile.close()
-    
 def forMiscChinese(lines, filename):
-    # newFile = open(filename, "w", encoding="utf8")
+    newFile = open(filename, "w", encoding="utf8")
     formattedText = []
 
     for i in range (len(lines)):
@@ -103,8 +102,8 @@ def forMiscChinese(lines, filename):
             kanji = line
             imi = nextLine
             yomi = hanzi.to_zhuyin(kanji)
-            # newFile.write("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
+            newFile.write("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
             formattedText.append("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
                
-    # newFile.close()
+    newFile.close()
     return formattedText
