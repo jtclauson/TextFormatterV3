@@ -11,16 +11,16 @@ def Format(text, filename, origin):
             inputFileName = datetime.datetime.now().strftime("%Y-%m-%d")+"_"+origin
         else:
             inputFileName = filename
-        filename = "app/formatted/"+inputFileName+".txt"
+        filename = inputFileName+".txt"
 
         formattedLines = []
         
         if origin == "Imiwa":
-            formattedLines = forImiwa(lines, filename)
+            formattedLines = forImiwa(lines)
         elif origin == "Pleco":
-            formattedLines = forPleco(lines, filename)
+            formattedLines = forPleco(lines)
         elif origin == "Misc-Chinese":
-            formattedLines = forMiscChinese(lines, filename)
+            formattedLines = forMiscChinese(lines)
     except:
         finalFormatted = {"error": "Error in converting input text"}
         return finalFormatted
@@ -46,8 +46,7 @@ def formatEnglish(rawString):
                 newEntry=newEntry+"・"+chunk+"<br>"
     return newEntry
    
-def forImiwa(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+def forImiwa(lines):
     formattedText = []
     for i in range (len(lines)):
         entry = lines[i]
@@ -59,21 +58,16 @@ def forImiwa(lines, filename):
                 kanji = entry[:-1]
                 yomi = "No Kanji"
                 meaning = lines[i+1]
-                newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
                 formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
             else:
                 spl = entry.split("[")
                 kanji = spl[0][:-1]
                 yomi = spl[1][:-2]
                 meaning = lines[i+1].strip()
-                newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
                 formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+yomi+"\n")
-               
-    newFile.close()    
     return formattedText
    
-def forPleco(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+def forPleco(lines):
     formattedText = []
 
     for i in range (len(lines)):
@@ -84,14 +78,10 @@ def forPleco(lines, filename):
             dufa = transcriptions.to_zhuyin(pinyin)
             rawString = entry[2]
             meaning=formatEnglish(rawString).strip()
-            newFile.write("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
             formattedText.append("\""+meaning+"\"" + "; " +kanji+ "; "+dufa+"\n")
-               
-    newFile.close()
     return formattedText
 
-def forMiscChinese(lines, filename):
-    newFile = open(filename, "w", encoding="utf8")
+def forMiscChinese(lines):
     formattedText = []
 
     for i in range (len(lines)):
@@ -102,8 +92,5 @@ def forMiscChinese(lines, filename):
             kanji = line
             imi = nextLine
             yomi = hanzi.to_zhuyin(kanji)
-            newFile.write("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
             formattedText.append("\""+imi+"\"" + "; " +kanji+ "; "+yomi+"\n")
-               
-    newFile.close()
     return formattedText

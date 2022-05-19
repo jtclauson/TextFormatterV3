@@ -34,7 +34,8 @@ h1 {
     vertical-align: middle;
 }
 .text{
-    padding: 5px;
+    margin: 10px;
+    padding: 10px;
     background-color: #efefef;
 }
 input:hover, textarea:hover {
@@ -77,6 +78,7 @@ textarea {
 }
 .copy-button {
     width: 100;
+    margin: 5px;
     padding: 6px;
     border: none;
     -webkit-border-radius: 5px; 

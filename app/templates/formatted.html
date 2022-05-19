@@ -19,8 +19,8 @@
                 {% endfor %}
             </div>
             <button class="copy-button" onclick="copyTextToClip()">Copy Text</button>
-            <p class="label">Your file can be found here:</p>
-            <label>{{formatted.filename}}</label>
+            <button class="copy-button" onclick="downloadFile()">Download</button>
+            <input id="filename" value="{{formatted.filename}}" hidden>
             <br>
         </div>
     </div>
